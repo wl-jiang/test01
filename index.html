@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: rgb(55, 148, 148);
+        }
+
+        .comment-box {
+            background-color: #fff;
+            margin: 70px;
+            border-radius: 5px;
+            padding-bottom: 10px;
+        }
+
+        .close {
+            background-color: rgb(16, 16, 125);
+            border: 0;
+            height: 40px;
+            width: 95%;
+            margin: 10px 20px;
+            border-radius: 5px;
+            color: #fff;
+            cursor:pointer;
+        }
+        .close:hover{
+            background-color: rgba(16, 16, 125, 0.514);
+        }
+        .header {
+            font-size: 30px;
+            margin-left: 30px;
+            margin-bottom: 10px;
+        }
+
+        .comment-form {
+            margin-left: 20px;
+
+        }
+
+        input#name {
+            height: 20px;
+            width: 50%;
+            margin-bottom: 20px;
+        }
+
+        #comment {
+            resize: none;
+            margin-bottom: 10px;
+            width: 85%
+        }
+
+        input#name,
+        #comment {
+            background: rgba(197, 194, 194, 0.502);
+            border: 0;
+            border-radius: 5px;
+            outline: none;
+            padding: 10px;
+        }
+
+        #btn-post {
+            background: rgb(55, 148, 148);
+            border: 0;
+            height: 30px;
+            width: 60px;
+            border-radius: 5px;
+            color: #fff;
+            margin-bottom: 20px;
+            cursor:pointer;
+        }
+        #btn-post:hover{
+            background-color: rgba(55, 148, 148, 0.63);
+        }
+        .comments h4 {
+            margin: 10px 35px;
+        }
+
+        .date {
+            float: right;
+            font-size: 12px;
+            font-weight: 300;
+        }
+
+        .comments p {
+            display: block;
+            background-color: rgba(197, 194, 194, 0.502);
+            margin: 10px 35px;
+            padding: 2rem 1rem;
+            font-weight: 300;
+        }
+
+        .comments hr {
+            margin: 0 5px;
+            border: 1px solid rgb(238, 218, 238);
+        }
+
+        #name:disabled,
+        #comment:disabled,
+        #btn-post:disabled {
+            background-color: gray;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="comment-box">
+
+            <button class="close">关闭留言</button>
+            <h4 class="header">留言板</h4>
+
+            <div class="comment-form">
+                <div>
+                    <input type="text" placeholder="请输入您的姓名..." id="name">
+                </div>
+                <div>
+                    <textarea type="text" rows="3" cols="30" placeholder="请输入您的留言..." id="comment"></textarea>
+                </div>
+                <button id="btn-post">留言</button>
+            </div>
+
+            <div>
+                <h4 class="header">留言列表</h4>
+                <div class="comments">
+                    <!-- <hr>
+                    <h4>
+                        <span>姓名</span>
+                        <span class="date">日期</span>
+                    </h4>
+                    <p>留言内容1</p> -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+        //获取元素
+        const commentBox = document.querySelector('.comments');
+        const nameInput = document.querySelector('#name');
+        const commentInput = document.querySelector('#comment');
+        const btnSubmit = document.querySelector('#btn-post');
+        const btnClose = document.querySelector('.close');
+        //数据初始化
+        //获取数据,并渲染初始数据
+        const comments = [
+            {
+                name: "jiang",
+                comment: "hello,吃在科大",
+                time: "Mon Jul 29 2024"
+            }
+        ];
+        rederComments()
+        //发布留言功能
+        btnSubmit.onclick = function () {
+            let nameStr = nameInput.value.replace(/<(\/?\w+)>/g, "&lt;$1&gt;");
+            let commentStr = commentInput.value.replace(/<(\/?\w+)>/g, "&lt;$1&gt;");
+            comments.unshift({
+                name: nameStr,
+                comment: commentStr,
+                time: new Date()
+            })
+            rederComments();
+            document.getElementById("name").value="";
+            document.getElementById("comment").value="";
+        }
+        //封装函数
+        function rederComments() {
+            commentBox.innerHTML = "";
+            for (let i = 0; i < comments.length; i++) {
+                commentBox.insertAdjacentHTML('beforeend', `
+                 <hr>
+                    <h4>
+                        <span>${comments[i].name}</span>
+                        <span class="date">${comments[i].time}</span>
+                    </h4>
+                    <p>${comments[i].comment}</p>
+                    `)
+            }
+        }
+        //关闭、开启留言
+        let isClosed = false;
+        btnClose.onclick = function () {
+            if (isClosed) {
+                btnClose.innerHTML = "关闭留言"
+            }
+            else {
+                btnClose.innerHTML = "开启留言"
+            }
+            isClosed = !isClosed;
+            nameInput.disabled = !nameInput.disabled
+            commentInput.disabled = !commentInput.disabled
+            btnSubmit.disabled = !btnSubmit.disabled
+        }
+    </script>
+
+</body>
+
+</html>
